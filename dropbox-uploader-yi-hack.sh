@@ -49,8 +49,6 @@ mapfile -t REMOTE < <(bash $HOME/Dropbox-Uploader/dropbox_uploader.sh list $REMO
 LASTREMOTE2=${REMOTE[@]:(-1)}
 LASTREMOTE=$(echo $LASTREMOTE2 | cut -d' ' -f2-)
 
-echo -e "the last remote is $LASTREMOTE"
-
 echo -e "\e[1mFound' ${#CAMFILES[@]} 'directories in the camera's sd card:  \n"
 printf '%s\n' "${CAMFILES[@]}"
 echo -e "\e[0m=====================================================\n"
@@ -58,29 +56,21 @@ echo -e "\e[0m=====================================================\n"
 if [[ ${#REMOTE[@]} -eq 0 ]];
 then
 LASTCUTCONV='1'
-echo "remote =0"
 else
 LASTCUT2=$(echo $LASTREMOTE | sed 's/[A-Za-z]*//g')
-echo "LASTCUT2 IS $LASTCUT2"
-  LASTCUT=$(echo ${LASTCUT2:0:4}'-'${LASTCUT2:4:2}'-'${LASTCUT2:6:2}' '${LASTCUT2:8:2})
-echo "LASTCUT IS $LASTCUT"
+LASTCUT=$(echo ${LASTCUT2:0:4}'-'${LASTCUT2:4:2}'-'${LASTCUT2:6:2}' '${LASTCUT2:8:2})
 LASTCUTCONV=$(date -d "$LASTCUT" +%s)
-echo "LASTCUTCONV IS $LASTCUTCONV"
 fi
 
 for DIR in "${CAMFILES[@]}"
 do
 	
   DIRCUT2=$(echo $DIR | sed 's/[A-Za-z]*//g')
-echo "DIRCUT2 IS $DIRCUT2"
   DIRCUT=$(echo ${DIRCUT2:0:4}'-'${DIRCUT2:4:2}'-'${DIRCUT2:6:2}' '${DIRCUT2:8:2})
-echo "DIRCUT IS $DIRCUT"
   DIRCUTCONV=$(date -d "$DIRCUT" +%s)
-echo "DIRCUTCONV IS $DIRCUTCONV"
 
     if [ $DIRCUTCONV -gt $LASTCUTCONV ];
     then
-    echo "working with $DIR"
     wget -r -nH --cut-dirs=4 --no-parent --reject="tmp.*" --user=$USER --password=$PASSWD ftp://$CAMERAIP:$FTPPORT//tmp/sd/record/$DIR/*
     mapfile -t MEDIA < <(ls $DIR/)
 		for FILE in "${MEDIA[@]}"
