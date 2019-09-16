@@ -24,7 +24,7 @@ then
 else
     
 
-  echo -e "\e[1mDropbox-Uploader-YI was not found at $HOME\e[0m"
+  echo -e "\e[1mDropbox-Uploader was not found at $HOME\e[0m"
   echo -e "\e[1mDownloading now...\e[0m"
   git clone https://github.com/andreafabrizi/Dropbox-Uploader.git $HOME/Dropbox-Uploader
   chmod -R +x $HOME/Dropbox-Uploader
